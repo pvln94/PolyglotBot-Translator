@@ -1,56 +1,154 @@
-<div align="center">
-<h1> LinguaSync: Real-Time Voice Translator </h1> <a href="#"><img alt="language" src="https://user-images.githubusercontent.com/132539454/278971782-9453805e-e2e6-4d99-b1de-cf8fcd3e7105.svg"></a>
-</div>
+# PolyglotBot - Multilingual Translation & Learning Assistant
 
-Real-Time Voice Translator is a machine learning project that aims to provide a seamless and natural experience of cross-lingual communication. It uses deep neural networks to translate voice from one language to another in real time while preserving the tone and emotion of the speaker. It is a desktop application that supports Windows, Linux, and Mac operating systems.
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
+![Flask](https://img.shields.io/badge/Flask-2.0%2B-lightgrey)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-The application is easy to use: simply select the languages you want to translate between and start speaking. The application will listen to your voice and provide instant translations in real-time. You can also use the application to translate conversations between two or more people.
+## Table of Contents
+1. [Project Overview](#project-overview-)
+2. [Features](#features-)
+3. [Implementation Details](#implementation-details-)
+4. [Installation](#installation-)
+5. [Usage](#usage-)
+6. [API Reference](#api-reference-)
+7. [Contributing](#contributing-)
+8. [License](#license-)
 
+## Project Overview <a name="project-overview"></a>
+PolyglotBot is a Flask-based web application that provides:
+- Real-time text translation using Google Translate API
+- Text-to-speech conversion in multiple languages
+- Simple REST API endpoints for integration
 
-### Dependencies
-    <=Python3.11, gTTS, pyaudio, playsound==1.2.2, deep-translator, SpeechRecognition, google-transliteration-api, cx-Freeze
+## Features <a name="features"></a>
+### Core Translation Features
+- **Text Translation** between 100+ languages
+- **Text-to-Speech** output in translated language
+- **Temporary Audio Files** management
+- **Asynchronous Playback** of translated speech
 
+## Implementation Details <a name="implementation-details"></a>
+The translator is built using the following core components:
 
-### Getting started
+```python
+from flask import Flask, render_template, request, jsonify
+from gtts import gTTS
+from playsound import playsound
+import tempfile
+import threading
+from deep_translator import GoogleTranslator
+```
+Key Components
+Flask Web Framework: Handles HTTP requests and responses
 
-1. Clone this project and create virtualenv (recommended) and activate virtualenv.
-    ```
-    # Create virtualenv
-    python -m venv env
- 
-    # Linux/MacOS
-    source env/bin/activate
-    
-    # Windows
-    env\Scripts\activate
-    ```
-    
-2. Install require dependencies.
-    ```
-    pip install --upgrade wheel
-    
-    pip install -r requirements.txt
-    ```
+GoogleTranslator: Provides the translation functionality
 
-3. Run code and speech (have fun).
-    ```
-    python main.py
-    ```
+gTTS (Google Text-to-Speech): Converts translated text to speech
 
-### Program Flow:
-<a href="#"><img src="https://github.com/SamirPaulb/real-time-voice-translator/assets/77569653/73dd62d6-798d-4129-aff3-16d6d932a817" alt="Block Diagram of Voice Translator"></a>
+Tempfile: Manages temporary audio storage
 
+Threading: Enables non-blocking audio playback
 
-### Install Windows/Linux/Mac Application <a href="https://github.com/SamirPaulb/real-time-voice-translator/releases/latest"><img src="https://user-images.githubusercontent.com/132539454/278971282-8d676023-a03a-463c-8e55-3f0afe6e3e58.svg" alt="DOWNLOAD"></a>
+Installation <a name="installation"></a>
+Requirements
+Python 3.8+
 
-I am using <a href="https://github.com/marcelotduarte/cx_Freeze/tree/main">cx_Freeze</a> to build executable file of this app. The build settings can be changed by modifying the <a href="https://github.com/SamirPaulb/real-time-voice-translator/blob/main/setup.py">setup.py</a> file.
+pip package manager
 
-##### Build installer containing all the files:
-- Windows: ```python setup.py bdist_msi```
-- Linux: ```python setup.py bdist_rpm```
-- Mac: ```python setup.py bdist_mac```
+Setup
+bash
+Copy
+# Clone repository
+git clone https://github.com/yourusername/PolyglotBot.git
+cd PolyglotBot
 
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-### GUI 
-<a href="#"><img src="https://github.com/SamirPaulb/real-time-voice-translator/assets/77569653/f96a4115-a88f-4096-9a00-954b8527d872" alt="App GUI"></a>
+# Install dependencies
+pip install -r requirements.txt
+Required Packages
+The requirements.txt file includes:
 
+text
+Copy
+flask==2.0.1
+gtts==2.2.3
+playsound==1.2.2
+deep-translator==1.9.1
+python-dotenv==0.19.0
+Usage <a name="usage"></a>
+Running the Application
+bash
+Copy
+python app.py
+Example Requests
+Translate text from English to Spanish:
+
+http
+Copy
+POST /translate
+Content-Type: application/json
+
+{
+    "text": "Hello world",
+    "target_lang": "es",
+    "speak": true
+}
+Response:
+
+json
+Copy
+{
+    "translated_text": "Hola mundo",
+    "audio_file": "/temp/audio_12345.mp3",
+    "status": "success"
+}
+API Reference <a name="api-reference"></a>
+Endpoints
+Endpoint	Method	Parameters	Description
+/translate	POST	text, target_lang, [speak]	Translates text and optionally generates speech
+/languages	GET	-	Returns supported languages
+Language Codes
+The API uses standard ISO 639-1 language codes (e.g., 'es' for Spanish, 'fr' for French).
+
+Contributing <a name="contributing"></a>
+Contributions are welcome! Please follow these guidelines:
+
+Fork the repository
+
+Create a feature branch
+
+Submit a pull request
+
+License <a name="license"></a>
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+File Hashes (latest version):
+
+app.py: sha256: a1b2... (replace with actual hash)
+
+requirements.txt: sha256: c3d4... (replace with actual hash)
+
+README.md: sha256: e5f6... (replace with actual hash)
+
+For verification:
+
+bash
+Copy
+sha256sum app.py requirements.txt README.md
+Copy
+
+This README includes:
+
+1. Proper Markdown formatting with headers (##, ###)
+2. Code blocks with syntax highlighting
+3. Tables for API documentation
+4. Badges at the top
+5. File hashes section at the bottom
+6. Clear section organization with anchor links
+7. Installation and usage instructions
+8. Implementation details showing the core imports you mentioned
+
+The hashes shown are placeholders - you should replace them with actual SHA-256 hashes of your files after creating them.
