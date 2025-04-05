@@ -85,6 +85,20 @@ Copy
 python app.py
 Example Requests
 Translate text from English to Spanish:
+![Screenshot 2025-04-05 214129](https://github.com/user-attachments/assets/0c78d5fa-769c-4016-8c31-65ea4a6f153d)
+
+![Screenshot 2025-04-05 213231](https://github.com/user-attachments/assets/9c084423-4990-457b-a31a-560749ed273a)
+
+![Screenshot 2025-04-05 213500](https://github.com/user-attachments/assets/2483befe-830f-4c67-a49a-e5ba77c1d2c3)
+![Screenshot 2025-04-05 213832](https://github.com/user-attachments/assets/b39cc13e-74cb-49c0-aabf-accceb8c699f)
+![Screenshot 2025-04-05 213701](https://github.com/user-attachments/assets/ba07b541-1534-4f86-a5e3-14e86f4ef1da)
+
+![Screenshot 2025-04-05 213450](https://github.com/user-attachments/assets/bf012456-90b5-497c-a2fc-c08617594447)
+
+
+![Screenshot 2025-04-05 214021](https://github.com/user-attachments/assets/1127f030-37d7-48d5-9e9b-a177b096709b)
+
+
 
 http
 Copy
