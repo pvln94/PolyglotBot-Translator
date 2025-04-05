@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice & Text Translator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fc;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2d6a4f;
+        }
+
+        .container {
+            max-width: 8000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-size: 1.1em;
+            color: #555;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        textarea, select, button {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            background-color: #f9f9f9;
+        }
+
+        button {
+            background-color: #2d6a4f;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #218c4f;
+        }
+
+        .output-section {
+            background-color: #fafafa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .output-section h2 {
+            color: #2d6a4f;
+        }
+
+        .output-section p {
+            font-size: 1.2em;
+            color: #555;
+        }
+
+        .speech-button {
+            background-color: #4caf50;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 5px;
+            border: none;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 10px;
+            display: block;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        .speech-button:hover {
+            background-color: #45a049;
+        }
+
+        .form-container {
+            margin-bottom: 20px;
+        }
+
+        /* chatbot css */
+        #chatbot-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            cursor: pointer;
+            z-index: 9999;
+        }
+
+        #chatbot-icon img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+
+        #chatbot-window {
+            display: none;
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 350px;
+            height: 500px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 9998;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        #chatbot-window .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 5px;
+        }
+
+        #chatbox {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            font-size: 14px;
+            max-height: 300px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        #language-selection {
+            margin-top: 10px;
+        }
+
+        #language-selection select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #language-selection button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #language-selection button:hover {
+            background-color: #45a049;
+        }
+
+        #user-input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            height: 80px;
+            font-size: 14px;
+        }
+
+        /* Hide the translation screen initially */
+        #translation-screen {
+            display: none;
+        }
+
+        /* Main Page Styling */
+        .image-section {
+            margin-bottom: 20px;
+        }
+
+        .main-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .description-section {
+            margin-bottom: 20px;
+        }
+
+        .description-section p {
+            font-size: 1.1em;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            background-color: #2d6a4f;
+            color: white;
+            padding: 12px 24px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background-color: #218c4f;
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Page -->
+    
+    <div id="main-page">
+            <h1>Welcome to PolyglotBot!</h1>
+            <div class="container">
+                
+                <!-- Description Section -->
+                <div class="description-section">
+    <p>
+        <strong>Features of PolyglotBot:</strong>
+    </p>
+    <p>
+        1. <strong>Multilingual Translation:</strong> 
+        PolyglotBot offers advanced translation functionality, allowing users to input either text or speech and receive translated text and speech as output. It supports multiple languages for seamless communication.
+    </p>
+    <p>
+        2. <strong>Language Learning Chatbot:</strong> 
+        PolyglotBot includes a chatbot feature designed to help users learn a new language. Users can interact with the chatbot in their preferred language, and it will assist them in learning their target language through text-based interactions.
+    </p>
+    <p>
+        <strong>Why Choose PolyglotBot?</strong>
+        PolyglotBot is your ultimate AI-powered translation and language learning assistant. Whether you need real-time translations or want to learn a new language, PolyglotBot provides accurate, intuitive, and user-friendly support. Start exploring the world of seamless communication and language learning today!
+    </p>
+</div>
+
+            <!-- Button to Open Translation Screen -->
+                <div class="button-section">
+                    <button onclick="openTranslationScreen()" class="cta-button">Start Translating Now</button>
+                </div>
+            </div>
+    </div>
+
+    <!-- Translation Screen -->
+    <div id="translation-screen">
+        <h1>🔊 AI-Powered Voice & Text Translator 📱🗣️💬🤖</h1>
+        <div class="container">
+            <!-- Input and output languages -->
+            <form id="translation-form" class="form-container">
+                <label for="input_text">Enter text to translate:</label>
+                <textarea id="input_text" name="input_text" rows="4" placeholder="Type text here..."></textarea>
+
+                <label for="input_lang">Select Input Language:</label>
+                <select id="input_lang" name="input_lang">
+                    {% for lang in languages %}
+                        <option value="{{ lang }}">{{ lang }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="output_lang">Select Output Language:</label>
+                <select id="output_lang" name="output_lang">
+                    {% for lang in languages %}
+                        <option value="{{ lang }}">{{ lang }}</option>
+                    {% endfor %}
+                </select>
+
+                <button type="button" onclick="submitForm()">Translate & Speak</button>
+            </form>
+
+            <div class="output-section">
+                <h2>Translated Text:</h2>
+                <p id="translated_text">Your translated text will appear here...</p>
+            </div>
+
+            <div class="output-section">
+                <h2>Speech Input:</h2>
+                <button class="speech-button" onclick="startListening()">Start Speech Recognition</button>
+                <p id="speech_result">Your speech input will appear here...</p>
+            </div>
+        </div>
+
+        <!-- Chatbot Icon -->
+        <div id="chatbot-icon" onclick="toggleChatWindow()">
+            <img  alt="Chatbot Icon">
+        </div>
+        
+        <!-- Chatbot Window (Hidden by Default) -->
+        <div id="chatbot-window" class="chatbot-window">
+            <div class="header">
+                <span>Chatbot</span>
+                <button onclick="toggleChatWindow()">X</button>
+            </div>
+        
+            <div id="chatbox" class="chatbox">
+    <!-- Chat messages will appear here -->
+    <button id="goToChatbotButton" onclick="window.location.href='https://polyglotbot.chat/'">Go To Chatbot</button>
+</div>
+        
+            
+        </div>
+    </div>
+
+    <script>
+        // Function to open the translation screen
+        function openTranslationScreen() {
+            document.getElementById('main-page').style.display = 'none';
+            document.getElementById('translation-screen').style.display = 'block';
+        }
+
+        function submitForm() {
+            const form = document.getElementById('translation-form');
+            const formData = new FormData(form);
+
+            fetch('/translate', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('translated_text').innerText = data.translated_text;
+            });
+        }
+
+        // Speech recognition using Web Speech API
+        function startListening() {
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = "en-US";
+            recognition.start();
+
+            recognition.onresult = function(event) {
+                const speechToText = event.results[0][0].transcript;
+                document.getElementById('speech_result').innerText = speechToText;
+
+                // Send recognized text to the server for translation and TTS
+                const outputLang = document.getElementById('output_lang').value;
+                fetch('/speech_to_text', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        speech_text: speechToText,
+                        output_lang: outputLang
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('translated_text').innerText = data.translated_text;
+                });
+            };
+
+            recognition.onerror = function(event) {
+                console.log('Speech recognition error', event.error);
+            };
+        }
+
+        // chatbot script
+        const language_codes = {
+        "English": "en",
+        "Hindi": "hi",
+        "Bengali": "bn",
+        "Spanish": "es",
+        "Chinese (Simplified)": "zh-CN",
+        "Chinese (Traditional)": "zh-TW",
+        "Russian": "ru",
+        "Japanese": "ja",
+        "Korean": "ko",
+        "German": "de",
+        "French": "fr",
+        "Tamil": "ta",
+        "Telugu": "te",
+        "Kannada": "kn",
+        "Gujarati": "gu",
+        "Punjabi": "pa",
+        "Marathi": "mr",
+        "Malayalam": "ml",
+        "Urdu": "ur",
+        "Arabic": "ar",
+        "Italian": "it",
+        "Portuguese": "pt",
+        "Turkish": "tr",
+        "Dutch": "nl",
+        "Greek": "el",
+        "Hebrew": "he",
+        "Thai": "th",
+        "Vietnamese": "vi",
+        "Swedish": "sv",
+        "Polish": "pl",
+        "Hungarian": "hu",
+        "Czech": "cs",
+        "Romanian": "ro",
+        "Filipino": "tl",
+        "Indonesian": "id"
+        };
+
+        // Toggle the chatbot window visibility
+        function toggleChatWindow() {
+        const chatWindow = document.getElementById('chatbot-window');
+        if (chatWindow.style.display === 'none' || chatWindow.style.display === '') {
+            chatWindow.style.display = 'flex';  // Show chatbot window
+        } else {
+            chatWindow.style.display = 'none';  // Hide chatbot window
+        }
+        }
+
+        // Populate the language options
+        function populateLanguageOptions() {
+        const inputLanguageSelector = document.getElementById('input-language-selector');
+        const outputLanguageSelector = document.getElementById('output-language-selector');
+        
+        Object.keys(language_codes).forEach(language => {
+            const inputOption = document.createElement('option');
+            inputOption.value = language_codes[language];
+            inputOption.textContent = language;
+            inputLanguageSelector.appendChild(inputOption);
+
+            const outputOption = document.createElement('option');
+            outputOption.value = language_codes[language];
+            outputOption.textContent = language;
+            outputLanguageSelector.appendChild(outputOption);
+        });
+        }
+
+        // Set the input and output languages
+        let inputLang = '';
+        let outputLang = '';
+
+        function setLanguages() {
+        const inputLanguageSelector = document.getElementById('input-language-selector');
+        const outputLanguageSelector = document.getElementById('output-language-selector');
+
+        inputLang = inputLanguageSelector.value;
+        outputLang = outputLanguageSelector.value;
+
+        const chatBox = document.getElementById('chatbox');
+        chatBox.innerHTML += `<div><strong>Chatbot:</strong> You've selected ${inputLang} as the input language and ${outputLang} as the output language.</div>`;
+        }
+
+        // Send message and get translation
+        async function sendMessage() {
+        const userInput = document.getElementById('user-input').value;
+        if (userInput.trim() === '') return;
+
+        const chatBox = document.getElementById('chatbox');
+        chatBox.innerHTML += `<div><strong>You:</strong> ${userInput}</div>`;
+        document.getElementById('user-input').value = '';  // Clear input field
+
+        // Call backend for translation
+        const response = await fetch('/translate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+            text: userInput,
+            sourceLanguage: inputLang,
+            targetLanguage: outputLang
+            })
+        });
+
+        const data = await response.json();
+        chatBox.innerHTML += `<div><strong>Bot:</strong> ${data.translatedText}</div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;  // Scroll to bottom
+        }
+
+        // Initialize the language selectors when the page loads
+        window.onload = populateLanguageOptions;
+    </script>
+</body>
+</html>
